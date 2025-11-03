@@ -10,7 +10,7 @@ public class MAV {
         this.metersToDest=metersToDest;
     }
     double percentUntilRecharge() {
-        double seconds = battery.amountLeft/(propellers.currentDrawEach*propellers.count);
+        double seconds = propellers.findSeconds(battery.amountLeft);
         double mTravelableOnBatteryLeft = seconds * propellers.speed;
         if (mTravelableOnBatteryLeft/metersToDest > 1) {
             return 1.0;
@@ -19,15 +19,15 @@ public class MAV {
         }
     }
     boolean doesReachDest() {
-        double seconds = battery.amountLeft/(propellers.currentDrawEach*propellers.count);
+        double seconds = propellers.findSeconds(battery.amountLeft);
         double metersCanTravel = seconds * propellers.speed;
         return metersCanTravel>=metersToDest;
     }
     String whichGoesFurther(MAV otherMAV) {
-        double MAVseconds = battery.capacity/(propellers.currentDrawEach*propellers.count);
-        double MAVdistance = MAVseconds * propellers.speed;
-        double otherMAVseconds = otherMAV.battery.capacity/(otherMAV.propellers.currentDrawEach*otherMAV.propellers.count);
-        double otherMAVdistance = otherMAVseconds * otherMAV.propellers.speed;
+        double MAVseconds = propellers.findSeconds(battery.capacity);
+        double MAVdistance = propellers.findDistance(MAVseconds);
+        double otherMAVseconds = otherMAV.propellers.findSeconds(otherMAV.battery.capacity);
+        double otherMAVdistance = otherMAV.propellers.findDistance(otherMAVseconds);
         if (MAVdistance>otherMAVdistance) {
             return name;
         }

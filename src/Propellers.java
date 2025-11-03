@@ -10,4 +10,10 @@ public class Propellers {
         this.speed = speed;
         this.currentDrawEach = currentDrawEach;
     }
+    double findDistance(double seconds) {
+        return seconds*speed;
+    }
+    double findSeconds(double batteryAmount) {
+        return batteryAmount/(currentDrawEach*count);
+    }
 }
