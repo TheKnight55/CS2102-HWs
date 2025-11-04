@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class Examples {
+
     @Test
     public void testPercentUntilRecharge50Percent() {
         MAV mav1 = new MAV("bumblebee",
@@ -13,64 +14,93 @@ public class Examples {
                 new Battery(10, 10), 20);
         assertEquals(0.5, mav1.percentUntilRecharge(), 0.01);
     }
+
     @Test
-    public void testPercentUntilRechargeOver100Percent() {
-        MAV mav1 = new MAV("bumblebee",
-                new Propellers(4, 3.2, 0.4),
-                new Battery(10, 30), 50);
-        assertEquals(1, mav1.percentUntilRecharge(), 0.01);
+    public void testPercentUntilRecharge100Percent() {
+        MAV mav1 = new MAV("bumblebee2",
+                new Propellers(4, 2, 0.25),
+                new Battery(10, 10), 20);
+        assertEquals(1.0, mav1.percentUntilRecharge(), 0.01);
     }
+
     @Test
-    public void testToDestNotReached() {
+    public void testDoesReachDestFalse() {
         MAV mav1 = new MAV("bumblebee",
                 new Propellers(4, 1, 0.25),
                 new Battery(10, 10), 20);
         assertEquals(false, mav1.doesReachDest());
     }
+
     @Test
-    public void testToDestReached() {
-        MAV mav1 = new MAV("butterfly",
-                new Propellers(4, 3.2, 0.4),
-                new Battery(10, 30), 50);
+    public void testDoesReachDestTrue() {
+        MAV mav1 = new MAV("bumblebee2",
+                new Propellers(4, 2, 0.25),
+                new Battery(10, 10), 20);
         assertEquals(true, mav1.doesReachDest());
     }
+
     @Test
-    public void testThisObjectGoesFurther() {
-        MAV mav1 = new MAV("bumblebee",
-                new Propellers(4, 3, 0.25),
-                new Battery(10, 30), 100);
-        MAV mav2 = new MAV("firefly",
-                new Propellers(2, 1, 0.2),
-                new Battery(10, 50), 100);
+    public void testThisObjectGoesFurtherFirstWins() {
+        MAV mav1 = new MAV("bumblebee", new Propellers(4, 1, 0.25),
+                new Battery(10, 10), 20);
+        MAV mav2 = new MAV("firefly", new Propellers(4, 1, 0.25),
+                new Battery(2, 2), 20);
         assertEquals("bumblebee", mav1.whichGoesFurther(mav2));
     }
+
     @Test
-    public void testSecondObjectGoesFurther() {
-        MAV mav1 = new MAV("bumblebee",
-                new Propellers(4, 3, 0.25),
-                new Battery(10, 30), 100);
-        MAV mav2 = new MAV("firefly",
-                new Propellers(2, 1, 0.2),
-                new Battery(10, 50), 100);
-        assertEquals("bumblebee", mav2.whichGoesFurther(mav1));
-    }
-    @Test
-    public void testNoneGoesFurther() {
-        MAV mav1 = new MAV("bumblebee",
-                new Propellers(4, 3, 0.25),
-                new Battery(10, 30), 100);
-        MAV mav2 = new MAV("firefly",
-                new Propellers(4, 3, 0.25),
-                new Battery(10, 50), 100);
+    public void testThisObjectGoesFurtherBothEqual() {
+        MAV mav1 = new MAV("bumblebee", new Propellers(4, 1, 0.25),
+                new Battery(10, 10), 20);
+        MAV mav2 = new MAV("firefly", new Propellers(4, 1, 0.25),
+                new Battery(10, 10), 20);
         assertEquals("bumblebee&firefly", mav1.whichGoesFurther(mav2));
     }
+
     @Test
-    public void testflyFor() {
-        MAV mav1 = new MAV("bumblebee",
-                new Propellers(4, 3, 0.25),
-                new Battery(10, 30), 100);
-        mav1.flyFor(60);
-        assertEquals(0.0, mav1.metersToDest, 0.01);
-        assertEquals(0.0, mav1.battery.amountLeft, 0.01);
+    public void testThisObjectGoesFurtherSecondWins() {
+        MAV mav1 = new MAV("bumblebee", new Propellers(4, 1, 0.25),
+                new Battery(2, 2), 20);
+        MAV mav2 = new MAV("firefly", new Propellers(4, 1, 0.25),
+                new Battery(10, 10), 20);
+        assertEquals("firefly", mav1.whichGoesFurther(mav2));
     }
+
+    @Test
+    public void testFlyFor() {
+        MAV mav = new MAV("blue beetle", new Propellers(4, 1, 0.25),
+                new Battery(10, 10), 20);
+        mav.flyFor(1);
+        assertEquals(9.0, mav.battery.amountLeft, 0.01);
+        assertEquals(19, mav.metersToDest, 0.01);
+    }
+
+    @Test
+    public void testFlyForOutOfJuice() {
+        MAV mav = new MAV("blue beetle", new Propellers(4, 1, 0.25),
+                new Battery(10, 0), 0);
+        mav.flyFor(1);
+        assertEquals(0.0, mav.battery.amountLeft, 0.01);
+        assertEquals(0.0, mav.metersToDest, 0.01);
+    }
+
+    @Test
+    public void testFindDistance(){
+        Propellers props = new Propellers(4,2.5,0.25);
+        Battery bat = new Battery(10.0,5.0);
+        assertEquals(12.5, props.findDistance(5.0), 0.01);
+
+    }
+
+    @Test
+    public void testFindSeconds(){
+        Propellers props = new Propellers(4,3,0.25);
+        Battery bat = new Battery(10.0,6.0);
+        assertEquals(6.0, props.findSeconds(bat.amountLeft), 0.01);
+
+    }
+
+
 }
+
+
