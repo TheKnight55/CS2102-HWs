@@ -25,7 +25,7 @@ public class Propellers {
      * @param seconds amount of seconds the MAV can run on its current battery (can use findSeconds)
      * @return the total distance it can travel on its current batter in meters
      */
-    double findDistance(double seconds) {
+    protected double findDistance(double seconds) {
         return seconds*speed;
     }
 
@@ -34,7 +34,7 @@ public class Propellers {
      * @param batteryAmount batteryLeft on this battery (mA-s)
      * @return the total amount of seconds the MAV can run on its current battery
      */
-    double findSeconds(double batteryAmount) {
+    protected double findSeconds(double batteryAmount) {
         return batteryAmount/(currentDrawEach*count);
     }
 }
