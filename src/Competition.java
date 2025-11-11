@@ -67,6 +67,6 @@ public class Competition {
      */
     @Override
     public String toString(){
-        return String.format("Vehicles: %.1", vehicles);
+        return String.format("Vehicles: %s", vehicles);
     }
 }

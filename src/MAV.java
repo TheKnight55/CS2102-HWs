@@ -107,6 +107,18 @@ public class MAV implements Vehicle {
         return name;
     }
     /**
+     * Compares the two objects to determine if they're the same Competition
+     * @param o the reference object with which to compare.
+     * @return true or false
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof MAV mav){
+            return mav.name.equals(name) && mav.propellers.equals(propellers);
+        }
+        return false;
+    }
+    /**
      *
      * @return
      */

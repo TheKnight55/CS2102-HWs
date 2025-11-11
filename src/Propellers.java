@@ -42,4 +42,16 @@ public class Propellers {
     protected double batterySpent(double secondsRunFor) {
         return currentDrawEach*count*secondsRunFor;
     }
+    /**
+     * Compares the two objects to determine if they're the same Competition
+     * @param o the reference object with which to compare.
+     * @return true or false
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Propellers prop){
+            return prop.count==count && prop.speed==speed && prop.currentDrawEach==currentDrawEach;
+        }
+        return false;
+    }
 }

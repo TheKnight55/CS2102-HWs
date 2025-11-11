@@ -29,4 +29,16 @@ public class Wheel {
     public String toString(){
         return String.format("%.1fkg, %.1f CL/kg", "", "");
     }
+    /**
+     * Compares the two objects to determine if they're the same wheel
+     * @param o the reference object with which to compare.
+     * @return true if the wheel values are equal or false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Wheel w){
+            return w.radius == this.radius && w.rps == this.rps;
+        }
+        return false;
+    }
 }

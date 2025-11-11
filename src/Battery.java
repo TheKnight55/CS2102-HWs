@@ -32,4 +32,16 @@ public class Battery {
     double getCapacity() {
         return capacity;
     }
+    /**
+     * Compares the two objects to determine if they're the same Competition
+     * @param o the reference object with which to compare.
+     * @return true or false
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Battery b){
+            return b.capacity==capacity && b.amountLeft==amountLeft;
+        }
+        return false;
+    }
 }

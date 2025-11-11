@@ -1,5 +1,6 @@
 /**
  * @author Emil Muzafarov
+ * @author Cat Corapi
  */
 import org.junit.Test;
 

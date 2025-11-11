@@ -96,7 +96,9 @@ public class Rover implements Vehicle {
      */
     @Override
     public double metersOnFull() {
-        return 0;
+        double seconds = battery.getCapacity()/currentDraw();
+        double metersCanTravel = seconds*findSpeed();
+        return metersCanTravel;
     }
 
     /**
