@@ -106,4 +106,12 @@ public class MAV implements Vehicle {
     public String identifier() {
         return name;
     }
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString(){
+        return String.format("%.1fkg, %.1f CL/kg", "", "");
+    }
 }

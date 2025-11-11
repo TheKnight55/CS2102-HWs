@@ -45,4 +45,12 @@ public class UUV implements Vehicle {
     public void runFor(double seconds) {
 
     }
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString(){
+        return String.format("%.1fkg, %.1f CL/kg", "", "");
+    }
 }

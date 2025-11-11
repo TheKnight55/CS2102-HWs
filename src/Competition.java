@@ -61,4 +61,12 @@ public class Competition {
         }
         return false;
     }
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString(){
+        return String.format("%.1fkg, %.1f CL/kg", "", "");
+    }
 }

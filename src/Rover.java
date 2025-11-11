@@ -22,8 +22,9 @@ public class Rover implements Vehicle {
     }
 
     /**
-     *
-     * @return
+     * Calculates the ratio of meters travelable on the rover's current battery to meters left to its destination.
+     * If the ratio>=1, the method should produce 1.0.
+     * @return the ratio between 0 to 1 inclusive, as a double
      */
     @Override
     public double percentUntilRecharge() {
@@ -31,8 +32,9 @@ public class Rover implements Vehicle {
     }
 
     /**
-     *
-     * @return
+     * Produces true if the rover can reach the destination on its current battery’s amount left.
+     * Otherwise, it produces false.
+     * @return true if can reach dest, false if not
      */
     @Override
     public boolean doesReachDest() {
@@ -42,8 +44,8 @@ public class Rover implements Vehicle {
     }
 
     /**
-     *
-     * @return
+     * Calculates the total current draw of all of the rover's wheels
+     * @return the current draw in mA as a double
      */
     protected double currentDraw() {
         double current=0;
@@ -54,8 +56,8 @@ public class Rover implements Vehicle {
     }
 
     /**
-     *
-     * @return
+     * Calculates the speed of the rover as the minimum speed of its wheels
+     * @return the speed in m/s as a double
      */
     protected double findSpeed() {
         double min=wheels.get(0).speed();
@@ -68,8 +70,8 @@ public class Rover implements Vehicle {
     }
 
     /**
-     *
-     * @return
+     * Finds the meters remaining until the destination is reached
+     * @return the distance in meters as a double
      */
     protected double findMetersToDest() {
         double totalDistance=0;
@@ -95,5 +97,14 @@ public class Rover implements Vehicle {
     @Override
     public double metersOnFull() {
         return 0;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString(){
+        return String.format("%.1fkg, %.1f CL/kg", "", "");
     }
 }

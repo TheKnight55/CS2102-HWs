@@ -16,9 +16,17 @@ public class Wheel {
 
     /**
      * Calculates the power draw of the wheel
-     * @return the power draw as a double
+     * @return the power draw in mA as a double
      */
     double powerDraw() {
         return rps*radius;
+    }
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString(){
+        return String.format("%.1fkg, %.1f CL/kg", "", "");
     }
 }
