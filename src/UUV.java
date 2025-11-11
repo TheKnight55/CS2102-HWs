@@ -51,6 +51,6 @@ public class UUV implements Vehicle {
      */
     @Override
     public String toString(){
-        return String.format("%.1fkg, %.1f CL/kg", "", "");
+        return String.format("{%s | %s | %s}", "", "");
     }
 }

@@ -67,6 +67,6 @@ public class Competition {
      */
     @Override
     public String toString(){
-        return String.format("%.1fkg, %.1f CL/kg", "", "");
+        return String.format("Vehicles: %.1", vehicles);
     }
 }
