@@ -33,36 +33,6 @@ public class Battery {
         return capacity;
     }
     /**
-     * Compares the two objects to determine if they're the same Competition
-     * @param o the reference object with which to compare.
-     * @return true or false
-     */
-    @Override
-    public boolean equals(Object o) {
-        if(o instanceof Battery b){
-            return b.capacity==capacity && b.amountLeft==amountLeft;
-        }
-        return false;
-    }
-
-    @Override
-    public String toString(){
-        return String.format("{%s %s}", capacity, amountLeft);
-    }
-
-        /**
-     * Mutates the battery's amount left
-     * based on the current being drawn from it * the amount of time the current is being drawn
-     * @param currentSeconds current being drawn * time current is drawn
-     */
-    public void consumeBattery(double currentSeconds){
-        this.amountLeft -= currentSeconds;
-        if(this.amountLeft <= 0.0){
-            this.amountLeft = 0.0;
-        }
-    }
-
-    /**
      * Computes the amount of time in seconds the battery can last starting from its current capactiy
      * @param currentDraw is the current being drawn from the battery in mA
      * @return the amount of seconds the battery can last on its current capacity
@@ -70,7 +40,6 @@ public class Battery {
     public double secondsOnLeft(double currentDraw){
         return this.amountLeft / currentDraw;
     }
-    
     /**
      * Computes the amount of time in seconds the battery can last starting from its full capactiy
      * @param currentDraw is the current being drawn from the battery in mA
@@ -78,5 +47,37 @@ public class Battery {
      */
     public double secondsOnFull(double currentDraw){
         return this.capacity / currentDraw;
+    }
+    /**
+     * Reduces the battery left by the given value.
+     * If the remaining battery<0, set amount left to 0
+     * @param amt amount of battery spent as a double
+     */
+    public void reduceBy(double amt) {
+        amountLeft-=amt;
+        if (amountLeft<0) {
+            amountLeft=0;
+        }
+    }
+    /**
+     * Compares the two objects to determine if they're the same Battery
+     * @param o the reference object with which to compare.
+     * @return true or false
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Battery b){
+            return Math.abs(b.capacity-capacity)<0.01 && Math.abs(b.amountLeft-amountLeft)<0.01;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return String.format("%s, %s", capacity, amountLeft);
     }
 }
