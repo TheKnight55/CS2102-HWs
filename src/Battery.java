@@ -44,4 +44,34 @@ public class Battery {
         }
         return false;
     }
+
+        /**
+     * Mutates the battery's amount left
+     * based on the current being drawn from it * the amount of time the current is being drawn
+     * @param currentSeconds current being drawn * time current is drawn
+     */
+    public void consumeBattery(double currentSeconds){
+        this.amountLeft -= currentSeconds;
+        if(this.amountLeft <= 0.0){
+            this.amountLeft = 0.0;
+        }
+    }
+
+    /**
+     * Computes the amount of time in seconds the battery can last starting from its current capactiy
+     * @param currentDraw is the current being drawn from the battery in mA
+     * @return the amount of seconds the battery can last on its current capacity
+     */
+    public double secondsOnLeft(double currentDraw){
+        return this.amountLeft / currentDraw;
+    }
+    
+    /**
+     * Computes the amount of time in seconds the battery can last starting from its full capactiy
+     * @param currentDraw is the current being drawn from the battery in mA
+     * @return the amount of seconds the battery can last on its full capacity
+     */
+    public double secondsOnFull(double currentDraw){
+        return this.capacity / currentDraw;
+    }
 }
