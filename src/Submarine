@@ -58,6 +58,9 @@ public class Submarine implements Vehicle {
         }
     }
 
+    /**
+     * Subtracts 1 from the total number of tail fins on the submarine (one breaks)
+     */
     public void brokenTailFins(){
         this.tailFins -= 1;
         if(this.tailFins < 0){
