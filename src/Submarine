@@ -126,4 +126,11 @@ public class Submarine implements Vehicle {
         assertEquals(0.0035, sub.percentUntilRecharge(), 0.01);
     }
 
+@Test
+    public void testDoesReachDestSubmarine(){
+        Submarine sub = new Submarine("Jack Sparrow", 5, new Propellers(2,1,0.25),
+                new Battery(10,10), 40);
+        assertEquals(false, sub.doesReachDest());
+    }
+
 }
