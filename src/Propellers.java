@@ -43,7 +43,7 @@ public class Propellers {
         return currentDrawEach*count*secondsRunFor;
     }
     /**
-     * Compares the two objects to determine if they're the same Competition
+     * Compares the two objects to determine if they're the same Propellers
      * @param o the reference object with which to compare.
      * @return true or false
      */
@@ -55,24 +55,11 @@ public class Propellers {
         return false;
     }
 
-    @Override
-    public String toString(){
-        return String.format("%s, %s, %s", this.count, this.speed, this.currentDrawEach);
-    }
-
-      /**
-     * Getter for propeller count
-     * @return ^
-     */
-    public int propellerCountGetter(){
-        return this.count;
-    }
-
     /**
-     * Getter for currentDrawEach
-     * @return ^
+     *
+     * @return
      */
-    public double currentDrawEachGetter(){
-        return this.currentDrawEach;
+    public String toString() {
+        return String.format("%s, %s, %s", count, speed,  currentDrawEach);
     }
 }
