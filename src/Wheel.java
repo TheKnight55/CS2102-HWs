@@ -27,7 +27,7 @@ public class Wheel {
      */
     @Override
     public String toString(){
-        return String.format("%.1fm, %.1frotations/s", radius, rps);
+        return String.format("%s m, %s rotations/s", radius, rps);
     }
     /**
      * Compares the two objects to determine if they're the same wheel
@@ -37,7 +37,7 @@ public class Wheel {
     @Override
     public boolean equals(Object o) {
         if(o instanceof Wheel w){
-            return w.radius == this.radius && w.rps == this.rps;
+            return Math.abs(w.radius-this.radius)<0.01 && Math.abs(w.rps-this.rps)<0.01;
         }
         return false;
     }
