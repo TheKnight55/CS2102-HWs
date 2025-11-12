@@ -54,4 +54,20 @@ public class Propellers {
         }
         return false;
     }
+
+      /**
+     * Getter for propeller count
+     * @return ^
+     */
+    public int propellerCountGetter(){
+        return this.count;
+    }
+
+    /**
+     * Getter for currentDrawEach
+     * @return ^
+     */
+    public double currentDrawEachGetter(){
+        return this.currentDrawEach;
+    }
 }
