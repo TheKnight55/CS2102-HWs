@@ -55,6 +55,11 @@ public class Propellers {
         return false;
     }
 
+    @Override
+    public String toString(){
+        return String.format("%s, %s, %s", this.count, this.speed, this.currentDrawEach);
+    }
+
       /**
      * Getter for propeller count
      * @return ^
