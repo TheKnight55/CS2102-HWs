@@ -133,4 +133,12 @@ public class Submarine implements Vehicle {
         assertEquals(false, sub.doesReachDest());
     }
 
+ @Test
+    public void testBrokenTailFins(){
+        Submarine sub = new Submarine("Jack Sparrow", 5, new Propellers(2,1,0.25),
+                new Battery(10,10), 40);
+        sub.brokenTailFins();
+        assertEquals(4, sub.tailFins);
+    }
+
 }
