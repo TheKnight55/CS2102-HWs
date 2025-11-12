@@ -56,8 +56,15 @@ public class Competition {
         }
         return winner;
     }
-    public void simulateAll(double seconds) {
 
+    /**
+     * Calls runFor() on each vehicle in the vehicles list for the given number of seconds.
+     * @param seconds seconds to run for (double>=0)
+     */
+    public void simulateAll(double seconds) {
+        for (Vehicle vehicle:vehicles) {
+            vehicle.runFor(seconds);
+        }
     }
 
     /**
