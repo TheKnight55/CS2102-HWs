@@ -217,6 +217,13 @@ public class Examples {
         assertEquals("Nobody", comp.whoGoesFurthest());
     }
 
+     @Test
+    public void testIdentifier(){
+        Submarine sub = new Submarine("Jack Sparrow", 5, new Propellers(2,1,0.25),
+                new Battery(10,10), 40);
+        assertEquals("Jack Sparrow5", sub.identifier());
+    }
+
 //    @Test
 //    public void testPercentUntilRecharge100Percent() {
 //        Vehicle mav1 = new MAV("bumblebee2",
