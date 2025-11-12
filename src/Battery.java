@@ -45,6 +45,11 @@ public class Battery {
         return false;
     }
 
+    @Override
+    public String toString(){
+        return String.format("{%s %s}", capacity, amountLeft);
+    }
+
         /**
      * Mutates the battery's amount left
      * based on the current being drawn from it * the amount of time the current is being drawn
