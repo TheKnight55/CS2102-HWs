@@ -1,144 +1,134 @@
 import java.util.List;
 
 public class Submarine implements Vehicle {
-
     /**
      * the name of the submarine's captain
      */
     public String captain;
     /**
-     * number of tail fins the submarine has
+     * number of tail fins the submarine has (current drawn by fins: 1.5mA)
      */
     public int tailFins;
     /**
-     * information about the submarine's propellers
+     * information about the submarine's propulsors
      */
-    public Propellers propellers;
+    public Propulsors propulsors;
     /**
      * information about the submarine's main battery
      */
     public Battery battery;
     /** how many meters beneath the surface left to go */
-    public double metersBelow;
-
+    public double metersBelowDest;
 
     /**
      * The constructor for a submarine with no default assumptions
      * @param captain name of captain
      * @param tailFins # tail fins
-     * @param propellers info about propellers
+     * @param propulsors info about propulsors
      * @param battery info about battery
-     * @param metersBelow # meters left to go
+     * @param metersBelowDest # meters left to go until the destination is reached
      */
-    public Submarine(String captain, int tailFins, Propellers propellers, Battery battery, double metersBelow) {
+    public Submarine(String captain, int tailFins, Propulsors propulsors, Battery battery, double metersBelowDest) {
         this.captain = captain;
         this.tailFins = tailFins;
-        this.propellers = propellers;
+        this.propulsors = propulsors;
         this.battery = battery;
-        this.metersBelow = metersBelow;
+        this.metersBelowDest = metersBelowDest;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String identifier() {
-        return this.captain + String.format("%d", this.tailFins);
+        return this.captain + String.format("(%d)", this.tailFins);
     }
 
+    /**
+     * Calculates the total current drawn by the submarine
+     * @return the current in mA as a double >=0
+     */
+    protected double findCurrentDrawn() {
+        return (this.tailFins*1.5 + this.propulsors.totalCurrent());
+    }
+
+    /**
+     * computes the ratio of meters travelable on its current battery’s amount left to meters until its destination.
+     * If the vehicle can go past its destination, the method should produce 1.0.
+     * @return the ratio
+     */
     @Override
     public double percentUntilRecharge() {
-        double currentDraw = (this.tailFins + this.propellers.propellerCountGetter()) *
-                this.propellers.currentDrawEachGetter();
+        double currentDraw = findCurrentDrawn();
         double seconds = this.battery.secondsOnLeft(currentDraw);
-        double distanceTravelable = seconds / this.metersBelow;
-
-        double percentUntilRecharge = distanceTravelable / this.metersBelow;
-        if(distanceTravelable >= this.metersBelow){
+        double altitudeTravelable = seconds*propulsors.findAcceleration(seconds);
+        double percentUntilRecharge = altitudeTravelable / this.metersBelowDest;
+        if(percentUntilRecharge >= 1){
             return 1.0;
         } else {
             return percentUntilRecharge;
         }
     }
-
     /**
-     * Subtracts 1 from the total number of tail fins on the submarine (one breaks)
+     * Determines whether the submarine can reach the destination on its current battery’s amount left.
+     * @return true if can reach dest, false if not
      */
-    public void brokenTailFins(){
-        this.tailFins -= 1;
-        if(this.tailFins < 0){
-            this.tailFins = 0;
-        }
-    }
-
     @Override
     public boolean doesReachDest() {
-        if(this.tailFins > 0){
-            return this.percentUntilRecharge() == 1.0;
-        } else {
-            return false;
-        }
-
+        return this.percentUntilRecharge() == 1.0;
     }
 
+    /**
+     * Produces the number of meters the submarine can travel on a full battery
+     * @return meters (must be >= 0)
+     */
     @Override
     public double metersOnFull() {
-        double currentDraw = (this.tailFins + this.propellers.propellerCountGetter()) *
-                this.propellers.currentDrawEachGetter();
+        double currentDraw = findCurrentDrawn();
         double seconds = this.battery.secondsOnFull(currentDraw);
-        double distanceTravelable = seconds / this.metersBelow;
-        return distanceTravelable;
+        double altitudeTravelable = seconds*propulsors.findAcceleration(seconds);
+        return altitudeTravelable;
     }
 
+    /**
+     * Travels for the given number of seconds at the speed of its propulsers, moving the vehicle closer to its
+     * destination and using its current amount of battery.
+     * If the vehicle goes past its destination, metersToDest = 0, and if it needs more battery than is available
+     * amountLeft = 0
+     * @param seconds number of seconds given
+     */
     @Override
     public void runFor(double seconds) {
-        if(seconds > 200) {
-            this.brokenTailFins();
+        double currentDraw = findCurrentDrawn();
+        double altitudeTravelable = seconds*propulsors.findAcceleration(seconds);
+        this.metersBelowDest -= altitudeTravelable;
+        if(this.metersBelowDest < 0.0){
+            this.metersBelowDest = 0.0;
         }
-        double currentDraw = (this.tailFins + this.propellers.propellerCountGetter()) *
-                this.propellers.currentDrawEachGetter();
-        double secondsLeft = this.battery.secondsOnLeft(currentDraw);
-        double distanceTravelable = secondsLeft / this.metersBelow;
-        this.metersBelow -= distanceTravelable;
-        if(this.metersBelow < 0.0){
-            this.metersBelow = 0.0;
-        }
-
         double currentSeconds = currentDraw * seconds;
-        this.battery.consumeBattery(currentSeconds);
+        this.battery.reduceBy(currentSeconds);
     }
-
+    /**
+     * Compares the two objects to determine if they're the same Competition
+     * @param o the reference object with which to compare.
+     * @return true or false
+     */
     @Override
     public boolean equals(Object o) {
         if(o instanceof Submarine sub){
-            return sub.tailFins==tailFins && sub.propellers.equals(propellers) && sub.captain.equals(captain)
-                    && sub.battery.equals(battery) && sub.metersBelow==metersBelow;
+            return sub.captain.equals(captain) && sub.tailFins==tailFins && sub.propulsors.equals(propulsors)
+                    && sub.battery.equals(battery) && Math.abs(sub.metersBelowDest-metersBelowDest)<0.01;
         }
         return false;
     }
 
+    /**
+     * Prints out the information about the submarine
+     * @return a String containing the captain, tailFins, propulsors, and battery of the submarine in the format "Captain: %s, %s fins, %s, %s
+     */
     @Override
     public String toString(){
-        return String.format("%s, %s, %s, 5s", this.captain, this.tailFins, this.propellers, this.battery);
+        return String.format("Captain %s, %s fins, %s, %s, %s", this.captain, this.tailFins, this.propulsors, this.battery, metersBelowDest);
     }
-
-@Test
-    public void testPercentUntilRechargeSubmarine(){
-        Submarine sub = new Submarine("Jack Sparrow", 5, new Propellers(2,1,0.25),
-                new Battery(10,10), 40);
-        assertEquals(0.0035, sub.percentUntilRecharge(), 0.01);
-    }
-
-@Test
-    public void testDoesReachDestSubmarine(){
-        Submarine sub = new Submarine("Jack Sparrow", 5, new Propellers(2,1,0.25),
-                new Battery(10,10), 40);
-        assertEquals(false, sub.doesReachDest());
-    }
-
- @Test
-    public void testBrokenTailFins(){
-        Submarine sub = new Submarine("Jack Sparrow", 5, new Propellers(2,1,0.25),
-                new Battery(10,10), 40);
-        sub.brokenTailFins();
-        assertEquals(4, sub.tailFins);
-    }
-
 }
