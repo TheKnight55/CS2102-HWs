@@ -1,0 +1,119 @@
+import java.util.List;
+
+public class Submarine implements Vehicle {
+
+    /**
+     * the name of the submarine's captain
+     */
+    public String captain;
+    /**
+     * number of tail fins the submarine has
+     */
+    public int tailFins;
+    /**
+     * information about the submarine's propellers
+     */
+    public Propellers propellers;
+    /**
+     * information about the submarine's main battery
+     */
+    public Battery battery;
+    /** how many meters beneath the surface left to go */
+    public double metersBelow;
+
+
+    /**
+     * The constructor for a submarine with no default assumptions
+     * @param captain name of captain
+     * @param tailFins # tail fins
+     * @param propellers info about propellers
+     * @param battery info about battery
+     * @param metersBelow # meters left to go
+     */
+    public Submarine(String captain, int tailFins, Propellers propellers, Battery battery, double metersBelow) {
+        this.captain = captain;
+        this.tailFins = tailFins;
+        this.propellers = propellers;
+        this.battery = battery;
+        this.metersBelow = metersBelow;
+    }
+
+    @Override
+    public String identifier() {
+        return this.captain + String.format("%d", this.tailFins);
+    }
+
+    @Override
+    public double percentUntilRecharge() {
+        double currentDraw = (this.tailFins + this.propellers.propellerCountGetter()) *
+                this.propellers.currentDrawEachGetter();
+        double seconds = this.battery.secondsOnLeft(currentDraw);
+        double distanceTravelable = seconds / this.metersBelow;
+
+        double percentUntilRecharge = distanceTravelable / this.metersBelow;
+        if(distanceTravelable >= this.metersBelow){
+            return 1.0;
+        } else {
+            return percentUntilRecharge;
+        }
+    }
+
+    public void brokenTailFins(){
+        this.tailFins -= 1;
+        if(this.tailFins < 0){
+            this.tailFins = 0;
+        }
+    }
+
+    @Override
+    public boolean doesReachDest() {
+        if(this.tailFins > 0){
+            return this.percentUntilRecharge() == 1.0;
+        } else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public double metersOnFull() {
+        double currentDraw = (this.tailFins + this.propellers.propellerCountGetter()) *
+                this.propellers.currentDrawEachGetter();
+        double seconds = this.battery.secondsOnFull(currentDraw);
+        double distanceTravelable = seconds / this.metersBelow;
+        return distanceTravelable;
+    }
+
+    @Override
+    public void runFor(double seconds) {
+        if(seconds > 200) {
+            this.brokenTailFins();
+        }
+        double currentDraw = (this.tailFins + this.propellers.propellerCountGetter()) *
+                this.propellers.currentDrawEachGetter();
+        double secondsLeft = this.battery.secondsOnLeft(currentDraw);
+        double distanceTravelable = secondsLeft / this.metersBelow;
+        this.metersBelow -= distanceTravelable;
+        if(this.metersBelow < 0.0){
+            this.metersBelow = 0.0;
+        }
+
+        double currentSeconds = currentDraw * seconds;
+        this.battery.consumeBattery(currentSeconds);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Submarine sub){
+            return sub.tailFins==tailFins && sub.propellers.equals(propellers) && sub.captain.equals(captain)
+                    && sub.battery.equals(battery) && sub.metersBelow==metersBelow;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("%s, %s, %s, 5s", this.captain, this.tailFins, this.propellers, this.battery);
+    }
+
+}
