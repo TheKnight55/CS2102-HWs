@@ -119,4 +119,11 @@ public class Submarine implements Vehicle {
         return String.format("%s, %s, %s, 5s", this.captain, this.tailFins, this.propellers, this.battery);
     }
 
+@Test
+    public void testPercentUntilRechargeSubmarine(){
+        Submarine sub = new Submarine("Jack Sparrow", 5, new Propellers(2,1,0.25),
+                new Battery(10,10), 40);
+        assertEquals(0.0035, sub.percentUntilRecharge(), 0.01);
+    }
+
 }
