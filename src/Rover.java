@@ -115,4 +115,13 @@ public class Rover implements Vehicle {
     public String toString(){
         return String.format("%s, %s, %s, %s", serialNum, wheels, battery, wayPoints);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Rover rover){
+            return rover.serialNum==serialNum && rover.wheels.equals(wheels) && rover.battery.equals(battery)
+                    && rover.wayPoints.equals(wayPoints);
+        }
+        return false;
+    }
 }
