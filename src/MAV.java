@@ -93,10 +93,7 @@ public class MAV implements Vehicle {
         if (metersToDest<0) {
             metersToDest=0.0;
         }
-        battery.amountLeft -= propellers.batterySpent(seconds);
-        if (battery.amountLeft<0) {
-            battery.amountLeft=0;
-        }
+        battery.reduceBy(propellers.batterySpent(seconds));
     }
     /**
      * Produces the name field of the MAV
@@ -107,14 +104,14 @@ public class MAV implements Vehicle {
         return name;
     }
     /**
-     * Compares the two objects to determine if they're the same Competition
+     * Compares the two objects to determine if they're the same mav
      * @param o the reference object with which to compare.
      * @return true or false
      */
     @Override
     public boolean equals(Object o) {
         if(o instanceof MAV mav){
-            return mav.name.equals(name) && mav.propellers.equals(propellers);
+            return mav.name.equals(name) && mav.propellers.equals(propellers) && mav.battery.equals(battery) && mav.metersToDest == metersToDest;
         }
         return false;
     }
