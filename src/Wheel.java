@@ -27,7 +27,7 @@ public class Wheel {
      */
     @Override
     public String toString(){
-        return String.format("%.1fkg, %.1f CL/kg", "", "");
+        return String.format("%.1fm, %.1frotations/s", radius, rps);
     }
     /**
      * Compares the two objects to determine if they're the same wheel

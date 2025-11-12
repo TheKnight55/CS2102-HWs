@@ -124,6 +124,6 @@ public class MAV implements Vehicle {
      */
     @Override
     public String toString(){
-        return String.format("{%s | %s | %s meters}", "", "");
+        return String.format("{%s %s, %s meters}", name, propellers, battery, metersToDest);
     }
 }

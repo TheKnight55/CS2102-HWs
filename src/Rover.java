@@ -28,7 +28,13 @@ public class Rover implements Vehicle {
      */
     @Override
     public double percentUntilRecharge() {
-        return 0;
+        double seconds = battery.getAmountLeft()/currentDraw();
+        double metersCanTravel = seconds*findSpeed();
+        if (metersCanTravel/findMetersToDest() > 1) {
+            return 1.0;
+        } else {
+            return metersCanTravel/findMetersToDest();
+        }
     }
 
     /**
@@ -107,6 +113,6 @@ public class Rover implements Vehicle {
      */
     @Override
     public String toString(){
-        return String.format("%s, %.1f CL/kg", "", "");
+        return String.format("%s, %s, %s, %s", serialNum, wheels, battery, wayPoints);
     }
 }

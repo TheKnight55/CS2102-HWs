@@ -10,8 +10,8 @@ public class Competition {
     }
 
     /**
-     *
-     * @param percent >= 0
+     * Calculates the number of vehicles from the vehicles list that have percentUntilRecharge() greater than the given percentage
+     * @param percent double>= 0
      * @return count (int >= 0)
      */
     public int overThreshold(double percent) {
@@ -25,8 +25,8 @@ public class Competition {
     }
 
     /**
-     *
-     * @return
+     * Creates a list of vehicle identifiers for vehicles that can reach their destination and win the race
+     * @return a list of vehicle names (List<String>)
      */
     public List<String> potentialWinners() {
         List<String> winners = new LinkedList<>();
@@ -39,11 +39,22 @@ public class Competition {
     }
 
     /**
-     *
-     * @return
+     * Determines which vehicles can travel the longest distance.
+     * If there is a tie (within 0.01 meters), the vehicle that appears later in the list wins.
+     * @return the identifier of the winning vehicle, or "Nobody" if the vehicles list is empty.
      */
     public String whoGoesFurthest() {
-        return "";
+        String winner="Nobody";
+        if (vehicles.size()>0) {
+            double distance=vehicles.get(0).metersOnFull();
+            for (Vehicle vehicle:vehicles) {
+                if (vehicle.metersOnFull()>=distance) {
+                    distance=vehicle.metersOnFull();
+                    winner=vehicle.identifier();
+                }
+            }
+        }
+        return winner;
     }
     public void simulateAll(double seconds) {
 
