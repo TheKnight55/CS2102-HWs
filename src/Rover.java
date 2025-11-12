@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Rover implements Vehicle {
@@ -38,8 +40,7 @@ public class Rover implements Vehicle {
     }
 
     /**
-     * Produces true if the rover can reach the destination on its current battery’s amount left.
-     * Otherwise, it produces false.
+     * Determines whether the rover can reach the destination on its current battery’s amount left.
      * @return true if can reach dest, false if not
      */
     @Override
@@ -68,7 +69,7 @@ public class Rover implements Vehicle {
     protected double findSpeed() {
         double min=wheels.get(0).speed();
         for (Wheel wheel:wheels) {
-            if (min<wheel.speed()) {
+            if (min>wheel.speed()) {
                 min=wheel.speed();
             }
         }
@@ -88,17 +89,39 @@ public class Rover implements Vehicle {
     }
 
     /**
-     *
+     * Moves the rover closer to the destination based on its leftover battery
      * @param seconds
      */
     @Override
     public void runFor(double seconds) {
-
+        double metersCanTravel = seconds*findSpeed();
+        reduceWayPoints(metersCanTravel);
+        battery.reduceBy(seconds*currentDraw());
+        if (battery.amountLeft<0) {
+            battery.amountLeft=0;
+        }
     }
 
     /**
-     *
-     * @return
+     * Adjusts the wayPoints according to the given distance the rover can travel.
+     * @param distance distance in meters (double>=0)
+     */
+    protected void reduceWayPoints(double distance) {
+        List<Double> updatedPoints=new ArrayList<>();
+        for (int i=0; i<wayPoints.size(); i++) {
+            if (wayPoints.get(i)<=distance) {
+                distance-=wayPoints.get(i);
+            } else {
+                updatedPoints.add(wayPoints.get(i)-distance);
+                distance=0;
+            }
+        }
+        wayPoints=new ArrayList<>(updatedPoints);
+    }
+
+    /**
+     * Calculates how many meters the rover can travel on full battery capacity.
+     * @return the number of meters as a double>=0
      */
     @Override
     public double metersOnFull() {
@@ -108,20 +131,36 @@ public class Rover implements Vehicle {
     }
 
     /**
-     *
-     * @return
+     * Determines whether or not the wayPoints of this rover are equal to the given wayPoints within 1 meter
+     * @param newWayPoints wayPoints of the other rover to compare to
+     * @return true if the wayPoints are equal and false otherwise
+     */
+    public boolean equalPoints(List<Double> newWayPoints) {
+        for (int i=0; i<wayPoints.size(); i++) {
+            if (!(Math.abs(wayPoints.get(i)-newWayPoints.get(i))<1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * Compares the two objects to determine if they're the same rover
+     * @param o the reference object with which to compare.
+     * @return true or false
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Rover rover) {
+            return rover.serialNum==serialNum && rover.wheels.equals(wheels) && rover.battery.equals(battery) && rover.equalPoints(wayPoints);
+        }
+        return false;
+    }
+    /**
+     * Prints out information about the rover
+     * @return a String containing the serialNum, wheels, battery, and wayPoints of the rover in the format "%s, %s, %s, $s"
      */
     @Override
     public String toString(){
         return String.format("%s, %s, %s, %s", serialNum, wheels, battery, wayPoints);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o instanceof Rover rover){
-            return rover.serialNum==serialNum && rover.wheels.equals(wheels) && rover.battery.equals(battery)
-                    && rover.wayPoints.equals(wayPoints);
-        }
-        return false;
     }
 }
